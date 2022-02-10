@@ -4,18 +4,7 @@ const articleModel = require('../models/article');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 
-const findall = async ctx => {
-  // const data = await Blog.findAll({
-  //   where: {
-  //     // [Op.or]: [ //Op.and Op.eq
-  //     //   { id: 6 },
-  //     //   { id: 7 } //WHERE (`blog`.`id` = 6 OR `blog`.`id` = 7);
-  //     // ]
-  //     id: {
-  //       [Op.or]: [6,7]
-  //     }
-  //   }
-  // })
+const FindAll = async ctx => {
   const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
   ctx.body = {
     code: 200,
@@ -23,8 +12,17 @@ const findall = async ctx => {
   }
 }
 
-const list = async ctx => {
-  const query = ctx.query;
+const FindOne = async ctx => {
+  const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
+  ctx.body = {
+    code: 200,
+    data
+  }
+}
+
+const List = async ctx => {
+  const query = ctx.query; {}
+  console.log('query',query)
   const { rows: data, count: total } = await articleModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
@@ -38,24 +36,7 @@ const list = async ctx => {
   };
 };
 
-
-const details = async ctx => {
-  const query = ctx.query;
-  if (!query.id) {
-    ctx.body = {
-      code: 300,
-      msg: 'id不能为空'
-    };
-    return false;
-  }
-  const res = await articleModel.findOne({
-    where: { id: Number(query.id) }
-  });
-  ctx.body = res;
-};
-
-
-const create = async ctx => {
+const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
   if (!params.title) {
@@ -79,8 +60,15 @@ const create = async ctx => {
   }
 };
 
+const Del = async ctx => {
+  await articleModel.destroy({ where: ctx.request.body });
+  ctx.body = {
+    code: 100,
+    msg: '删除成功'
+  };
+};
 
-const update = async ctx => {
+const Update = async ctx => {
   const params = ctx.request.body;
   if (!params.id) {
     ctx.body = {
@@ -98,19 +86,27 @@ const update = async ctx => {
   };
 };
 
-
-const destroy = async ctx => {
-  await articleModel.destroy({ where: ctx.request.body });
-  ctx.body = {
-    code: 100,
-    msg: '删除成功'
-  };
+const Details = async ctx => {
+  const query = ctx.query;
+  if (!query.id) {
+    ctx.body = {
+      code: 300,
+      msg: 'id不能为空'
+    };
+    return false;
+  }
+  const res = await articleModel.findOne({
+    where: { id: Number(query.id) }
+  });
+  ctx.body = res;
 };
+
 module.exports = {
-  list,
-  create,
-  destroy,
-  details,
-  update,
-  findall
+  List,
+  Add,
+  Del,
+  Update,
+  FindOne,
+  FindAll,
+  Details
 };

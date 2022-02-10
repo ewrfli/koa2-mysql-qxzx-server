@@ -5,11 +5,18 @@ const articleRouter = new Router({
     prefix: '/article'
 });
 
-articleRouter.get("/findall", articleCtl.findall);
-articleRouter.get('/list', articleCtl.list)
-articleRouter.post('/create', articleCtl.create)
-articleRouter.post('/destroy', articleCtl.destroy)
-articleRouter.get('/details', articleCtl.details)
-articleRouter.post('/update', articleCtl.update)
+articleRouter.get('/list', articleCtl.List)
+
+articleRouter.post('/add', articleCtl.Add)
+
+articleRouter.post('/del', articleCtl.Del)
+
+articleRouter.post('/update', articleCtl.Update)
+
+articleRouter.get('/findone', articleCtl.FindOne);
+
+articleRouter.get('/findall', articleCtl.FindAll);
+
+articleRouter.get('/details', articleCtl.Details)
 
 module.exports = articleRouter
