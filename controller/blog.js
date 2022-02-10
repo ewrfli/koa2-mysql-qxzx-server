@@ -1,4 +1,4 @@
-// 查询所有文章 /某作者的所有文章
+//test 查询所有文章 /某作者的所有文章
 const dbConfig = require('../db/dbConfig');
 const Blog = require('../models/blog');
 const sequelize = require("sequelize"); 

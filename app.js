@@ -9,6 +9,7 @@ const cors = require('koa2-cors')
 const mylogger = require('./controller/mylogger')
 
 //引入路由
+const { unproAdminRouter, proAdminRouter } = require('./routes/admin')
 const webRouter = require('./routes/web')
 const blogRouter = require('./routes/blog')
 const articleRouter = require('./routes/article')
@@ -38,6 +39,10 @@ app.use(cors())
 
 
 // 不受保护的routes
+app.use(unproAdminRouter.routes(), unproAdminRouter.allowedMethods())
+
+
+
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods()) //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
 app.use(blogRouter.routes(), blogRouter.allowedMethods())
 app.use(articleRouter.routes(), articleRouter.allowedMethods())//文章相关路由
@@ -45,6 +50,7 @@ app.use(articleRouter.routes(), articleRouter.allowedMethods())//文章相关路
 // 注册 JWT 中间件 
 
 //受jwk保护的routes放后面
+app.use(proAdminRouter.routes(), proAdminRouter.allowedMethods())
 
 
 // error-handling

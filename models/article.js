@@ -25,10 +25,10 @@ const article = dbConfig.define(
     article_content: {
         type: DataTypes.TEXT
     },
-    article_author: {
+    user_name: {
         type: DataTypes.STRING
     },
-    article_user_id: {
+    user_id: {
         type: DataTypes.INTEGER(11)
     },
     article_tag: {

@@ -5,34 +5,32 @@ const { DataTypes } = require("sequelize"); // 导入内置数据类型
 const moment = require('moment');
 
 // 定义表结构
-const admin = dbConfig.define(
-  'qx_admins',
+const comment = dbConfig.define(
+  'qx_comment',
   {
-    admin_id: {
-      type: DataTypes.INTEGER(11), // 设置字段类型
-      primaryKey: true, // 设置为主键
-      autoIncrement: true // 自增
+    comment_id: {
+        type: DataTypes.INTEGER(11), // 设置字段类型
+        primaryKey: true, // 设置为主键
+        autoIncrement: true // 自增
     },
-    admin_role: {
+    article_id: {
+        type: DataTypes.INTEGER(11)
+    },
+    comment_father_id: {
+        type: DataTypes.INTEGER(11)
+    },
+    user_id: {
+        type: DataTypes.INTEGER(11)
+    },
+    user_name: {
         type: DataTypes.STRING
     },
-    admin_name: {
-        type: DataTypes.STRING
+    comment_content: {
+        type: DataTypes.TEXT
     },
-    admin_password: {
-        type: DataTypes.STRING
-    },
-    admin_avatarimg: {
-        type: DataTypes.STRING
-    },
-    admin_phone: {
-        type: DataTypes.STRING
-    },
-    admin_email: {
-        type: DataTypes.STRING
-    },
-    admin_ip: {
-        type: DataTypes.STRING
+    comment_like_count: {
+        type: DataTypes.INTEGER,
+        defaultValue: '0'
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -55,4 +53,4 @@ const admin = dbConfig.define(
     freezeTableName: true
   }
 );
-module.exports = admin;
+module.exports = comment;

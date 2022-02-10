@@ -5,34 +5,25 @@ const { DataTypes } = require("sequelize"); // 导入内置数据类型
 const moment = require('moment');
 
 // 定义表结构
-const admin = dbConfig.define(
-  'qx_admins',
+const category = dbConfig.define(
+  'qx_category',
   {
-    admin_id: {
-      type: DataTypes.INTEGER(11), // 设置字段类型
-      primaryKey: true, // 设置为主键
-      autoIncrement: true // 自增
+    category_id: {
+        type: DataTypes.INTEGER(11), // 设置字段类型
+        primaryKey: true, // 设置为主键
+        autoIncrement: true // 自增
     },
-    admin_role: {
+    category_name: {
         type: DataTypes.STRING
     },
-    admin_name: {
+    category_coverimg: {
         type: DataTypes.STRING
     },
-    admin_password: {
+    category_desc: {
         type: DataTypes.STRING
     },
-    admin_avatarimg: {
-        type: DataTypes.STRING
-    },
-    admin_phone: {
-        type: DataTypes.STRING
-    },
-    admin_email: {
-        type: DataTypes.STRING
-    },
-    admin_ip: {
-        type: DataTypes.STRING
+    category_father_id: {
+        type: DataTypes.INTEGER(11)
     },
     createdAt: {
         type: DataTypes.DATE,
@@ -55,4 +46,4 @@ const admin = dbConfig.define(
     freezeTableName: true
   }
 );
-module.exports = admin;
+module.exports = category;
