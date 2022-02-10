@@ -21,5 +21,6 @@ sequelize
     console.error('链接失败:', err)
   })
 // 根据模型自动创建表
-sequelize.sync() //模型同步
+// sequelize.sync() //如果表不存在,则创建该表(如果已经存在,则不执行任何操作)
+sequelize.sync({ alter: true })//在表中进行必要的更改以使其与模型匹配.
 module.exports = sequelize

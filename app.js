@@ -11,6 +11,7 @@ const mylogger = require('./controller/mylogger')
 //引入路由
 const webRouter = require('./routes/web')
 const blogRouter = require('./routes/blog')
+const articleRouter = require('./routes/article')
 const { unprotectedRouter, protectedUserRouter } = require('./routes/users')
 
 // error handler
@@ -39,6 +40,8 @@ app.use(cors())
 // 不受保护的routes
 app.use(unprotectedRouter.routes(), unprotectedRouter.allowedMethods()) //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
 app.use(blogRouter.routes(), blogRouter.allowedMethods())
+app.use(articleRouter.routes(), articleRouter.allowedMethods())//文章相关路由
+
 // 注册 JWT 中间件 
 
 //受jwk保护的routes放后面
