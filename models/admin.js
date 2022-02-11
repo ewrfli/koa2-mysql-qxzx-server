@@ -17,7 +17,10 @@ const admin = dbConfig.define(
         type: DataTypes.STRING
     },
     admin_name: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: {
+            msg: '已存在'
+        }
     },
     admin_password: {
         type: DataTypes.STRING
@@ -26,7 +29,10 @@ const admin = dbConfig.define(
         type: DataTypes.STRING
     },
     admin_phone: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: {
+            msg: '已存在'
+        }
     },
     admin_email: {
         type: DataTypes.STRING

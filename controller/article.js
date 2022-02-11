@@ -8,7 +8,7 @@ const FindAll = async ctx => {
   // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
   const data = await Article.findAll({
     order: [
-      ['createdAt', 'DESC']
+      ['updatedAt', 'DESC']
     ]
   })
   ctx.body = {
@@ -34,7 +34,7 @@ const List = async ctx => {
     // },
     offset: (+query.page - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
-    order: [['createdAt','DESC']]
+    order: [['updatedAt','DESC']]
   });
   ctx.body = {
     data,
@@ -46,10 +46,10 @@ const List = async ctx => {
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
-  if (!params.title) {
+  if (!params) {
     ctx.body = {
       code: 1003,
-      msg: '标题不能为空'
+      msg: '不能为空'
     };
     return false;
   }
@@ -78,7 +78,7 @@ const Del = async ctx => {
 
 const Update = async ctx => {
   const params = ctx.request.body;
-  if (!params.id) {
+  if (!params.article_id) {
     ctx.body = {
       code: 1003,
       msg: 'id不能为空'
@@ -86,7 +86,7 @@ const Update = async ctx => {
     return false;
   }
   await articleModel.update(params, {
-    where: { id: params.id }
+    where: { article_id: params.article_id }
   });
   ctx.body = {
     code: 100,
@@ -96,7 +96,7 @@ const Update = async ctx => {
 
 const Details = async ctx => {
   const query = ctx.query;
-  if (!query.id) {
+  if (!query.article_id) {
     ctx.body = {
       code: 300,
       msg: 'id不能为空'

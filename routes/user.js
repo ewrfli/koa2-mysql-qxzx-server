@@ -23,7 +23,7 @@ proUserRouter.post("/del", userCtl.Del);
 
 proUserRouter.get("/findall", userCtl.FindAll);
 
-proUserRouter.get("/findone", userCtl.FindOne);
+proUserRouter.post("/findone", userCtl.FindOne);
 
 proUserRouter.get("/list", userCtl.List);
 module.exports = { unproUserRouter, proUserRouter };

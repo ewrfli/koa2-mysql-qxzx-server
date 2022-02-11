@@ -32,7 +32,10 @@ const user = dbConfig.define(
         type: DataTypes.STRING
     },
     user_phone: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      unique: {
+        msg: '已存在'
+      }
     },
     user_email: {
       type: DataTypes.STRING
