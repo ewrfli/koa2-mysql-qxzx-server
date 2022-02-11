@@ -5,7 +5,12 @@ const sequelize = require("sequelize");
 const { Op, QueryTypes  } = require('sequelize');//运算符
 
 const FindAll = async ctx => {
-  const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
+  // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
+  const data = await Article.findAll({
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  })
   ctx.body = {
     code: 200,
     data
@@ -20,6 +25,7 @@ const FindOne = async ctx => {
   }
 }
 
+//首页列表
 const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
@@ -36,6 +42,7 @@ const List = async ctx => {
   };
 };
 
+// 添加
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
@@ -61,6 +68,7 @@ const Add = async ctx => {
 };
 
 const Del = async ctx => {
+  console.log('Del',ctx.request.body)
   await articleModel.destroy({ where: ctx.request.body });
   ctx.body = {
     code: 100,
