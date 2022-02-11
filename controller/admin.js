@@ -77,7 +77,7 @@ const Update = async (ctx, next) => {
 };
 
 
-//查找
+//查找全部
 const FindAll = async (ctx, next) => {
     const data = await adminModel.findAll({
         order: [['updatedAt', 'DESC']],

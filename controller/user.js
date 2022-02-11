@@ -65,7 +65,7 @@ const Add = async (ctx) => {
         ctx.body = {
             code: rel ? 200 : 300,
             msg: rel ? '创建成功' : '创建失败',
-            data: rel,
+            data: rel
         };
   
     } catch (err) {
@@ -85,7 +85,7 @@ const Del = async (ctx, next) => {
         ctx.body = {
             code: rel ? 200 : 300,
             msg: rel ? '删除成功' : '删除失败',
-            rel: rel, //1成功 0失败
+            rel: rel //1成功 0失败
         };
     } catch (err) {
         ctx.body = {
@@ -107,12 +107,12 @@ const Update = async (ctx, next) => {
         return false;
     }
     const rel = await userModel.update(params, {
-        where: { user_id: params.user_id },
+        where: { user_id: Number(params.user_id) },
     });
     ctx.body = {
         code: rel[0] ? 200 : 300,
         msg: rel[0] ? '修改成功' : '修改失败',
-        data: rel,
+        data: rel
     }
 };
 
@@ -138,7 +138,7 @@ const FindOne = async (ctx, next) => {
     ctx.body = {
         code: data[0] ? 200 : 300,
         msg: data[0] ? '查询成功' : '查询失败',
-        data,
+        data
     };
 };
 

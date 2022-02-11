@@ -3,10 +3,10 @@ const dbConfig = require('../db/dbConfig');
 const articleModel = require('../models/article');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
+// const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
 
 const FindAll = async ctx => {
-  // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
-  const data = await Article.findAll({
+  const data = await articleModel.findAll({
     order: [
       ['updatedAt', 'DESC']
     ]
@@ -18,11 +18,17 @@ const FindAll = async ctx => {
 }
 
 const FindOne = async ctx => {
-  const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
+  const params = ctx.request.body;
+  console.log('findone', params);
+  const data = await articleModel.findAll({
+      where: params,
+      order: [['updatedAt', 'DESC']],
+  });
   ctx.body = {
-    code: 200,
-    data
-  }
+      code: data[0] ? 200 : 300,
+      msg: data[0] ? '查询成功' : '查询失败',
+      data,
+  };
 }
 
 //首页列表
@@ -46,7 +52,7 @@ const List = async ctx => {
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
-  if (!params) {
+  if (!params || !params.article_title) {
     ctx.body = {
       code: 1003,
       msg: '不能为空'
@@ -54,10 +60,11 @@ const Add = async ctx => {
     return false;
   }
   try {
-    await articleModel.create(params);
+    const rel = await articleModel.create(params);
     ctx.body = {
-      code: 100,
-      data: '创建成功'
+      code: rel ? 200 : 300,
+      msg: rel ? '创建成功' : '创建失败',
+      data: rel
     };
   } catch (err) {
     ctx.body = {
@@ -69,10 +76,11 @@ const Add = async ctx => {
 
 const Del = async ctx => {
   console.log('Del',ctx.request.body)
-  await articleModel.destroy({ where: ctx.request.body });
+  const rel = await articleModel.destroy({ where: ctx.request.body });
   ctx.body = {
-    code: 100,
-    msg: '删除成功'
+    code: rel ? 200 : 300,
+    msg: rel ? '删除成功' : '删除失败',
+    rel: rel //1成功 0失败
   };
 };
 
@@ -85,12 +93,13 @@ const Update = async ctx => {
     };
     return false;
   }
-  await articleModel.update(params, {
-    where: { article_id: params.article_id }
+  const rel = await articleModel.update(params, {
+    where: { article_id: Number(params.article_id) }
   });
   ctx.body = {
-    code: 100,
-    msg: '修改成功'
+    code: rel[0] ? 200 : 300,
+    msg: rel[0] ? '修改成功' : '修改失败',
+    data: rel
   };
 };
 
@@ -103,10 +112,14 @@ const Details = async ctx => {
     };
     return false;
   }
-  const res = await articleModel.findOne({
+  const data = await articleModel.findOne({
     where: { id: Number(query.id) }
   });
-  ctx.body = res;
+  ctx.body = {
+    code: rel[0] ? 200 : 300,
+    msg: rel[0] ? '查找成功' : '查找失败',
+    data
+  };
 };
 
 module.exports = {

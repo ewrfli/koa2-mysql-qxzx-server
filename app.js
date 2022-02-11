@@ -14,7 +14,7 @@ const { unproUserRouter, proUserRouter } = require('./routes/user')
 const articleRouter = require('./routes/article')
 //
 const webRouter = require('./routes/web')
-const blogRouter = require('./routes/blog')
+const blogRouter = require('./routes/testblog')
 
 
 // error handler

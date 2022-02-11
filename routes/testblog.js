@@ -1,5 +1,5 @@
 const Router = require("@koa/router")
-const blogCtl = require("../controller/blog");
+const blogCtl = require("../controller/testblog");
 
 const blogRouter = new Router({  
     prefix: '/blog'
