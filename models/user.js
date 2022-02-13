@@ -14,7 +14,10 @@ const user = dbConfig.define(
       autoIncrement: true // 自增
     },
     user_name: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      unique: {
+        msg: '已存在'
+      }
     },
     user_password: {
       type: DataTypes.STRING

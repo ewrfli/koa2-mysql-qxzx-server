@@ -3,6 +3,20 @@ const dbConfig = require('../db/dbConfig');
 const adminModel = require('../models/admin');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
+const jwt = require('jsonwebtoken')
+const SIGN_KEY = 'qxzx-server-jwt'
+
+class jwtUtil {
+    getToken(userDate) {
+        return jwt.sign(userDate, SIGN_KEY, { expiresIn: 3600 * 24 *7 })//过期时间 3600 * 24 *7
+    }
+
+    verifyToken(token) {
+        return jwt.verify(token, SIGN_KEY)
+    }
+    ////解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
+}
+const JWT = new jwtUtil()
 
 //登录
 const Login = async ctx => {
@@ -15,14 +29,63 @@ const Login = async ctx => {
             admin_password: params.admin_password,
         },
     });
-    ctx.body = {
-        code: data ? 200 : 300,
-        desc: data ? '登陆成功' : '账号或密码错误',
-        data
-    };
+    //如果用户名密码在数据库查询到
+    if(data){
+        // 签发token
+        let token = JWT.getToken({admin_name: data.admin_name, admin_id: data.admin_id}) || 0
+        ctx.body = {
+            code: data ? 200 : 300,
+            desc: data ? '登陆成功' : '账号或密码错误',
+            data,
+            token
+        };
+    }else {
+        ctx.body = {
+            code: 300,
+            msg: "登录失败用户名密码错误或不存在",
+            data,
+            token
+        };
+    }
+
 };
 
-
+//验证是否登录有jwt
+const verify = async ctx => {
+    let token = ctx.header.authorization //签发token 下次请求中附带在authorization:Bearer ...Jwt...
+    token = token.replace('Bearer ','')
+    try {
+        let result = JWT.verifyToken(token, SIGN_KEY) //解析token里 admin_name: data.admin_name, admin_id: data.admin_id
+        console.log('verify解析后', result)
+        const data = await adminModel.findOne({
+            where: {
+                admin_name: {
+                    [Op.eq]: `${result.admin_name}`,
+                },
+                admin_id: result.admin_id,
+            },
+        })
+        //如果用户名密码在数据库查询到
+        if(data){
+            ctx.body = {
+                code: 200,
+                msg: "认证成功",
+                data: data
+            };
+        }else {
+            ctx.body = {
+                code: 500,
+                msg: "认证失败null",
+                data: data
+            };
+        }
+    }catch (err) {
+        ctx.body = {
+            code: 500,
+            msg: "认证失败err",
+        };
+    }
+}
 
 //添加管理员
 const Add = async (ctx) => {
@@ -104,6 +167,7 @@ const FindOne = async (ctx, next) => {
 };
 
 module.exports = {
+    verify,
     Login,
     Add,
     Del,
