@@ -1,7 +1,7 @@
 //创建一个sequelize对象实例
 const Sequelize = require('sequelize')
 // 传入参数 数据库名，用户名，密码 
-const sequelize = new Sequelize('koaqxzxDB', 'koaqxzxDB', '123456', {
+const sequelize = new Sequelize('koaMysqlQxzx', 'koaMysqlQxzx', '123456', {
   host: 'localhost', //数据库IP地址
   dialect: 'mysql',
 //   operatorsAliases: false,

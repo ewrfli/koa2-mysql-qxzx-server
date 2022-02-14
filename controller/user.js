@@ -3,8 +3,22 @@ const dbConfig = require('../db/dbConfig');
 const userModel = require('../models/user');
 const sequelize = require('sequelize');
 const { Op, QueryTypes } = require('sequelize'); //运算符
+const jwt = require('jsonwebtoken')
+const SIGN_KEY = 'qxzx-server-jwt'
 
-//登录
+class jwtUtil {
+    getToken(userDate) {
+        return jwt.sign(userDate, SIGN_KEY, { expiresIn: 3600 * 24 *7 })//过期时间 3600 * 24 *7
+    }
+
+    verifyToken(token) {
+        return jwt.verify(token, SIGN_KEY)
+    }
+    ////解析token里 {username: 'qqqq',_id: '61dae237144807cea88cc7e5',iat: 1641744804,exp: 1642349604}
+}
+const JWT = new jwtUtil()
+
+//用户登录
 const Login = async (ctx) => {
     const params = ctx.request.body;
     const data = await userModel.findOne({
@@ -15,11 +29,22 @@ const Login = async (ctx) => {
             user_password: params.user_password,
         },
     });
-    ctx.body = {
-        code: data ? 200 : 300,
-        desc: data ? '登陆成功' : '账号或密码错误',
-        data
-    };
+     //如果用户名密码在数据库查询到
+     if(data){
+        // 签发token
+        let token = JWT.getToken({user_phone: data.user_phone, user_id: data.user_id}) || 0
+        ctx.body = {
+            code: data ? 200 : 300,
+            desc: data ? '登陆成功' : '手机号或密码错误',
+            data,
+            token: token || 0
+        };
+    }else {
+        ctx.body = {
+            code: 300,
+            msg: "登录失败手机号密码错误或不存在"
+        };
+    }
 };
 
 //注册
@@ -29,7 +54,7 @@ const Register = async (ctx) => {
     if (!params || !params.user_name) {
         ctx.body = {
             code: 1003,
-            msg: '不能为空',
+            msg: 'name不能为空',
         };
         return false;
     }
@@ -48,6 +73,43 @@ const Register = async (ctx) => {
         };
     }
 };
+
+//验证是否登录有jwt
+const verify = async ctx => {
+    let token = ctx.header.authorization //签发token 下次请求中附带在authorization:Bearer ...Jwt...
+    token = token.replace('Bearer ','')
+    try {
+        let result = JWT.verifyToken(token, SIGN_KEY) //解析token里 admin_name: data.admin_name, admin_id: data.admin_id
+        console.log('verify解析后', result)
+        const data = await userModel.findOne({
+            where: {
+                user_phone: {
+                    [Op.eq]: `${result.user_phone}`,
+                },
+                user_id: result.user_id,
+            },
+        })
+        //如果用户名密码在数据库查询到
+        if(data){
+            ctx.body = {
+                code: 200,
+                msg: "认证成功",
+                data: data
+            };
+        }else {
+            ctx.body = {
+                code: 500,
+                msg: "认证失败null",
+                data: data
+            };
+        }
+    }catch (err) {
+        ctx.body = {
+            code: 500,
+            msg: "认证失败err",
+        };
+    }
+}
 
 //添加
 const Add = async (ctx) => {
@@ -162,6 +224,7 @@ const List = async (ctx, next) => {
 };
 
 module.exports = {
+    verify,
     Login,
     Register,
     Add,

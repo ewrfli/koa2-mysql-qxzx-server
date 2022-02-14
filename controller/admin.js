@@ -18,7 +18,7 @@ class jwtUtil {
 }
 const JWT = new jwtUtil()
 
-//登录
+//管理员登录
 const Login = async ctx => {
     const params = ctx.request.body;
     const data = await adminModel.findOne({
@@ -37,14 +37,14 @@ const Login = async ctx => {
             code: data ? 200 : 300,
             desc: data ? '登陆成功' : '账号或密码错误',
             data,
-            token
+            token: token || 0
         };
     }else {
         ctx.body = {
             code: 300,
             msg: "登录失败用户名密码错误或不存在",
             data,
-            token
+            token: token || 0
         };
     }
 

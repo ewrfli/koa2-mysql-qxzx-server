@@ -7,7 +7,7 @@ const unproUserRouter = new Router({  //unprotected无保护的
 });
 unproUserRouter.post("/login", userCtl.Login);
 unproUserRouter.post("/register", userCtl.Register);
-
+unproUserRouter.post("/verify", userCtl.verify); //验证是否登录成功测试路由
 
 const proUserRouter = new Router({ //有保护的
     prefix: '/user'
