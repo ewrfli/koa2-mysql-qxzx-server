@@ -1,9 +1,15 @@
 // 用户收藏文章 增删改查api
 const dbConfig = require('../db/dbConfig');
 const starModel = require('../models/star');
+const articleModel = require('../models/article');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_stars`", { type: QueryTypes.SELECT }); //原始查询
+
+// 定义关系
+// 1----1   一对一关系
+starModel.hasOne(articleModel, {foreignKey: 'article_id', sourceKey: 'article_id'})
+articleModel.belongsTo(starModel, {foreignKey: 'article_id', targetKey: 'article_id'})
 
 const FindAll = async ctx => {
   const data = await starModel.findAll({
@@ -22,6 +28,7 @@ const FindOne = async ctx => {
   console.log('findone', params);
   const data = await starModel.findAll({
       where: params,
+      include: [articleModel],
       order: [['updatedAt', 'DESC']],
   });
   ctx.body = {
@@ -31,26 +38,36 @@ const FindOne = async ctx => {
   };
 }
 
-//列表
-const List = async ctx => {
-  const query = ctx.query; {}
-  console.log('query',query)
-  const { rows: data, count: total } = await starModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
-    // where: { // count符合查询条件的记录总数
-    // },
-    offset: (+query.page - 1) * +query.pageSize,//跳过。。个
-    limit: +query.pageSize,
-    order: [['updatedAt','DESC']]
+//我的收藏列表
+const List = async ctx => { //?id=xx
+  const query = ctx.query;
+  if (!query.user_id) {
+    ctx.body = {
+      code: 300,
+      msg: 'user_id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    user_id: Number(ctx.query.user_id)
+  }
+  const data = await starModel.findAll({
+    where,
+    include: [articleModel],
+    order: [['updatedAt', 'DESC']]
   });
-  ctx.body = {
-    data,
-    total
-  };
+
+    ctx.body = {
+      code: data[0] ? 200 : 300,
+      msg: data[0] ? '查找成功' : '查找失败',
+      data
+    };
 };
+
 
 // 添加
 const Add = async ctx => {
-  const params = ctx.request.body;
+  const params = ctx.request.body; //{user_id: xx, article_id:xx, article_title:xx,}
   console.log('create:',params)
   if (!params || !params.article_title) {
     ctx.body = {

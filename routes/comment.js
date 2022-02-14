@@ -5,9 +5,11 @@ const commentRouter = new Router({
     prefix: '/comment'
 });
 
+
+
 commentRouter.get('/list', commentCtl.List)
 
-commentRouter.post('/add', commentCtl.Add)
+commentRouter.post('/add', commentCtl.Add)//用户添加评论
 
 commentRouter.post('/del', commentCtl.Del)
 

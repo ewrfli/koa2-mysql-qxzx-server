@@ -152,7 +152,7 @@ const Like = async ctx => {
   await articleModel.update({article_like_count: Count}, {
     where
   });
-
+  
     ctx.body = {
       code: data ? 200 : 300,
       msg: data ? '查找成功' : '查找失败',
