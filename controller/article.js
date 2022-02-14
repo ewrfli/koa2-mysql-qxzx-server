@@ -120,21 +120,72 @@ const Details = async ctx => {
     where
   });
 
-    console.log('a',data.article_read_count)
-    let readedCount = data.article_read_count + 1
-    console.log('b',readedCount)
-    const up = await articleModel.update({article_read_count: readedCount}, {
-      where
-    });
-    console.log('up',up)
-    //阅读量
+  let readedCount = data.article_read_count + 1
+  await articleModel.update({article_read_count: readedCount}, {
+    where
+  });    //阅读量
+
     ctx.body = {
       code: data ? 200 : 300,
       msg: data ? '查找成功' : '查找失败',
       data
     };
+};
 
+const Like = async ctx => {
+  const query = ctx.query;
+  if (!query.id) {
+    ctx.body = {
+      code: 300,
+      msg: 'id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    article_id: Number(ctx.query.id)
+  }
+  const data = await articleModel.findOne({
+    where
+  });
 
+  let Count = data.article_like_count + 1
+  await articleModel.update({article_like_count: Count}, {
+    where
+  });
+
+    ctx.body = {
+      code: data ? 200 : 300,
+      msg: data ? '查找成功' : '查找失败',
+      data
+    };
+};
+
+const Repost = async ctx => {
+  const query = ctx.query;
+  if (!query.id) {
+    ctx.body = {
+      code: 300,
+      msg: 'id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    article_id: Number(ctx.query.id)
+  }
+  const data = await articleModel.findOne({
+    where
+  });
+
+  let Count = data.article_repost_count + 1
+  await articleModel.update({article_repost_count: Count}, {
+    where
+  });
+
+    ctx.body = {
+      code: data ? 200 : 300,
+      msg: data ? '查找成功' : '查找失败',
+      data
+    };
 };
 
 module.exports = {
@@ -144,5 +195,7 @@ module.exports = {
   Update,
   FindOne,
   FindAll,
-  Details
+  Details,
+  Like,
+  Repost
 };

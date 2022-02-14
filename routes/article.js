@@ -25,8 +25,8 @@ articleRouter.get('/findall', articleCtl.FindAll);
 
 articleRouter.get('/details', articleCtl.Details) //http://127.0.0.1:3002/article/details?id=1 点击read_count自增
 
-articleRouter.get('/like', articleCtl.FindAll);
+articleRouter.get('/like', articleCtl.Like);
 
-articleRouter.get('/repost', articleCtl.FindAll);
+articleRouter.get('/repost', articleCtl.Repost);
 
 module.exports = articleRouter
