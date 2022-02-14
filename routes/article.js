@@ -17,6 +17,6 @@ articleRouter.get('/findone', articleCtl.FindOne);
 
 articleRouter.get('/findall', articleCtl.FindAll);
 
-articleRouter.get('/details', articleCtl.Details)
+articleRouter.get('/details', articleCtl.Details) //http://127.0.0.1:3002/article/details?id=1
 
 module.exports = articleRouter

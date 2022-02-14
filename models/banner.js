@@ -5,32 +5,21 @@ const { DataTypes } = require("sequelize"); // 导入内置数据类型
 const moment = require('moment');
 
 // 定义表结构
-const company = dbConfig.define(
-  'qx_company',
+const banner = dbConfig.define(
+  'qx_banner',
   {
-    company_id: {
+    banner_id: {
         type: DataTypes.INTEGER(11), // 设置字段类型
         primaryKey: true, // 设置为主键
         autoIncrement: true // 自增
     },
-    company_name: {
+    banner_name: {
         type: DataTypes.STRING
     },
-    company_coverimg: {
+    banner_coverimg: {
         type: DataTypes.STRING
     },
-    company_category_name: {
-        type: DataTypes.STRING
-    },
-    company_tag_name: {
-        type: DataTypes.STRING
-    },
-    company_desc: {
-        type: DataTypes.STRING
-    },
-    company_content: {
-        type: DataTypes.TEXT
-    },
+
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: sequelize.NOW,
@@ -52,4 +41,4 @@ const company = dbConfig.define(
     freezeTableName: true
   }
 );
-module.exports = company;
+module.exports = banner;

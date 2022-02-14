@@ -1,13 +1,12 @@
-// 文章 增删改查api
-// 查询所有文章 /某作者的所有文章
+// 用户评论 增删改查api
 const dbConfig = require('../db/dbConfig');
-const articleModel = require('../models/article');
+const commentModel = require('../models/comment');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
 
 const FindAll = async ctx => {
-  const data = await articleModel.findAll({
+  const data = await commentModel.findAll({
     order: [
       ['updatedAt', 'DESC']
     ]
@@ -21,7 +20,7 @@ const FindAll = async ctx => {
 const FindOne = async ctx => {
   const params = ctx.request.body;
   console.log('findone', params);
-  const data = await articleModel.findAll({
+  const data = await commentModel.findAll({
       where: params,
       order: [['updatedAt', 'DESC']],
   });
@@ -36,7 +35,7 @@ const FindOne = async ctx => {
 const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
-  const { rows: data, count: total } = await articleModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
+  const { rows: data, count: total } = await commentModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
     offset: (+query.page - 1) * +query.pageSize,//跳过。。个
@@ -53,7 +52,7 @@ const List = async ctx => {
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
-  if (!params || !params.article_title) {
+  if (!params || !params.comment_content) {
     ctx.body = {
       code: 1003,
       msg: '不能为空'
@@ -61,7 +60,7 @@ const Add = async ctx => {
     return false;
   }
   try {
-    const rel = await articleModel.create(params);
+    const rel = await commentModel.create(params);
     ctx.body = {
       code: rel ? 200 : 300,
       msg: rel ? '创建成功' : '创建失败',
@@ -77,7 +76,7 @@ const Add = async ctx => {
 
 const Del = async ctx => {
   console.log('Del',ctx.request.body)
-  const rel = await articleModel.destroy({ where: ctx.request.body });
+  const rel = await commentModel.destroy({ where: ctx.request.body });
   ctx.body = {
     code: rel ? 200 : 300,
     msg: rel ? '删除成功' : '删除失败',
@@ -87,15 +86,15 @@ const Del = async ctx => {
 
 const Update = async ctx => {
   const params = ctx.request.body;
-  if (!params.article_id) {
+  if (!params.comment_id) {
     ctx.body = {
       code: 1003,
       msg: 'id不能为空'
     };
     return false;
   }
-  const rel = await articleModel.update(params, {
-    where: { article_id: Number(params.article_id) }
+  const rel = await commentModel.update(params, {
+    where: { comment_id: Number(params.comment_id) }
   });
   ctx.body = {
     code: rel[0] ? 200 : 300,
@@ -113,8 +112,8 @@ const Details = async ctx => {
     };
     return false;
   }
-  const data = await articleModel.findOne({
-    where: { article_id: Number(query.id) }
+  const data = await commentModel.findOne({
+    where: { comment_id: Number(query.id) }
   });
   ctx.body = {
     code: data ? 200 : 300,

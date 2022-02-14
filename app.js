@@ -14,9 +14,15 @@ const { unproAdminRouter, proAdminRouter } = require('./routes/admin')
 const { unproUserRouter, proUserRouter } = require('./routes/user')
 const articleRouter = require('./routes/article')
 const UploadRouter = require('./routes/upload')
+const categoryRouter = require('./routes/category')
+const commentRouter = require('./routes/comment')
+const companyRouter = require('./routes/company')
+const fansRouter = require('./routes/fans')
+const starRouter = require('./routes/star')
+const tagRouter = require('./routes/tag')
+const bannerRouter = require('./routes/banner')
 //
 const webRouter = require('./routes/web')
-const blogRouter = require('./routes/testblog')
 
 
 // error handler
@@ -47,14 +53,19 @@ app.use(cors())
 app.use(unproAdminRouter.routes(), unproAdminRouter.allowedMethods())//管理员登录
 app.use(unproUserRouter.routes(), unproUserRouter.allowedMethods())//用户登录
 app.use(articleRouter.routes(), articleRouter.allowedMethods())//文章查看
-app.use(UploadRouter.routes(), UploadRouter.allowedMethods())//文件上传
+app.use(categoryRouter.routes(), categoryRouter.allowedMethods())//文章分类
+app.use(commentRouter.routes(), commentRouter.allowedMethods())//文章评论
+app.use(companyRouter.routes(), companyRouter.allowedMethods())//公司标签
+app.use(fansRouter.routes(), fansRouter.allowedMethods())//用户关注好友
+app.use(starRouter.routes(), starRouter.allowedMethods())//收藏
+app.use(tagRouter.routes(), tagRouter.allowedMethods())//话题标签
+app.use(bannerRouter.routes(), bannerRouter.allowedMethods())//banner img
 // 
 //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
-app.use(blogRouter.routes(), blogRouter.allowedMethods())
 
 
 // 注册 JWT 中间件 
-app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
+// app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
 //受jwk保护的routes放后面
 //正在开发
 app.use(proAdminRouter.routes(), proAdminRouter.allowedMethods())//管理员

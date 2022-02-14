@@ -1,4 +1,4 @@
-// 查询所有文章 /某作者的所有文章
+// pc端相关api
 const articleFindAllweb = async ctx => {
 
 }
