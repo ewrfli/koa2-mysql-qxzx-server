@@ -36,14 +36,21 @@ const FindOne = async ctx => {
 const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
+  const where = {
+    article_title: {
+      [Op.like]: `%${query.article_title}%`
+    }
+  }
   const { rows: data, count: total } = await articleModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
-    offset: (+query.page - 1) * +query.pageSize,//跳过。。个
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
   });
   ctx.body = {
+    code:  200,
     data,
     total
   };
