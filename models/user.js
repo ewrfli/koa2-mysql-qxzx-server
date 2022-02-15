@@ -44,7 +44,7 @@ const user = dbConfig.define(
       type: DataTypes.STRING
     },
     user_birthday: {
-        type: DataTypes.DATEONLY
+        type: DataTypes.STRING
     },
     user_age: {
         type: DataTypes.STRING
