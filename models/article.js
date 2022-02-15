@@ -13,6 +13,10 @@ const article = dbConfig.define(
         primaryKey: true, // 设置为主键
         autoIncrement: true // 自增
     },
+    article_visible_power: {
+        type: DataTypes.INTEGER,
+        defaultValue: '0'
+    },
     article_title: {
         type: DataTypes.STRING
     },
