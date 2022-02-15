@@ -191,10 +191,16 @@ const FindAll = async (ctx, next) => {
 
 //查询某一个
 const FindOne = async (ctx, next) => {
-    const params = ctx.request.body;
-    console.log('findone', params);
+    const query = ctx.query
+    const where = {
+        user_name: {
+          [Op.like]: `%${query.user_name}%`
+        }
+    }
+    console.log('findone', where);
+
     const data = await userModel.findAll({
-        where: params,
+        where,
         order: [['updatedAt', 'DESC']],
     });
     ctx.body = {
@@ -207,10 +213,16 @@ const FindOne = async (ctx, next) => {
 const List = async (ctx, next) => {
     const query = ctx.query;
     console.log('query', query);
+    const where = {
+        user_name: {
+          [Op.like]: `%${query.user_name}%`
+        }
+    }
     const { rows: data, count: total } = await userModel.findAndCountAll({
         //结合了 findAll 和 count 的便捷方法
         // where: { // count符合查询条件的记录总数
         // },
+        where,
         offset: (+query.pageNo - 1) * +query.pageSize, //跳过。。个
         limit: +query.pageSize,
         order: [['updatedAt', 'DESC']],
