@@ -19,22 +19,21 @@ const FindAll = async ctx => {
 }
 
 const FindOne = async ctx => {
-  const params = ctx.request.body;
-  console.log('findone', params);
-  const data = await articleModel.findAll({
-      where: params,
-      order: [['updatedAt', 'DESC']],
+  const query = ctx.query;
+  console.log('findone', query);
+  const data = await articleModel.findOne({
+      where: {article_id: query.article_id}
   });
   ctx.body = {
-      code: data[0] ? 200 : 300,
-      msg: data[0] ? '查询成功' : '查询失败',
+      code: data ? 200 : 300,
+      msg: data ? '查询成功' : '查询失败',
       data,
   };
 }
 
 //首页列表
 const List = async ctx => {
-  const query = ctx.query; {}
+  const query = ctx.query;
   console.log('query',query)
   const where = {
     article_title: {

@@ -39,9 +39,15 @@ const uploadImg = async ctx => { //myfile字段 //body form-data
     let path = ctx.req.file.path.replace('public','')
     path = ctx.origin + '' + path.replace()
     ctx.body = {
+        errno: 0,
         filename: ctx.req.file.filename,//返回文件名
         path: path,
-        data: ctx.req.file 
+        // data: ctx.req.file 
+        data:[{
+            url: path,
+            alt: ctx.req.file.filename,
+            href: path
+        }]
     }
 }
 

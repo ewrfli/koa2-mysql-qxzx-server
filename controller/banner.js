@@ -8,7 +8,7 @@ const { Op, QueryTypes  } = require('sequelize');//运算符
 const List = async ctx => {
   const data = await bannerModel.findAll({
     order: [
-      ['updatedAt', 'DESC']
+      ['banner_id', 'DESC']
     ]
   })
   ctx.body = {
