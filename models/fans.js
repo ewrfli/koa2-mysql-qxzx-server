@@ -19,10 +19,10 @@ const fans = dbConfig.define(
     user_name: {
       type: DataTypes.STRING
     }, //attention
-    attentionuser_id: {
+    attention_user_id: {
       type: DataTypes.INTEGER(11)
     },
-    attentionuser_name: {
+    attention_user_name: {
       type: DataTypes.STRING
     }, //attention
     createdAt: {

@@ -31,28 +31,61 @@ const FindOne = async ctx => {
   };
 }
 
-//列表
+//管理端列表
 const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
+  const where = {
+    user_name: {
+      [Op.like]: `%${query.user_name}%`
+    }
+  } 
   const { rows: data, count: total } = await fansModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
-    offset: (+query.page - 1) * +query.pageSize,//跳过。。个
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
   });
   ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
     data,
     total
   };
+};
+
+//用户 我的关注列表
+const myList = async ctx => { //?id=xx
+  const query = ctx.query;
+  if (!query.user_id) {
+    ctx.body = {
+      code: 300,
+      msg: 'user_id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    user_id: Number(ctx.query.user_id)
+  }
+  const data = await fansModel.findAll({
+    where,
+    order: [['updatedAt', 'DESC']]
+  });
+
+    ctx.body = {
+      code: data[0] ? 200 : 300,
+      msg: data[0] ? '查找成功' : '查找失败',
+      data
+    };
 };
 
 // 添加
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
-  if (!params || !params.attentionuser_name) {
+  if (!params || !params.attention_user_name) {
     ctx.body = {
       code: 1003,
       msg: '不能为空'
@@ -123,6 +156,7 @@ const Details = async ctx => {
 };
 
 module.exports = {
+  myList,
   List,
   Add,
   Del,

@@ -35,14 +35,22 @@ const FindOne = async ctx => {
 const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
+  const where = {
+    user_name: {
+      [Op.like]: `%${query.user_name}%`
+    }
+  } 
   const { rows: data, count: total } = await commentModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
-    offset: (+query.page - 1) * +query.pageSize,//跳过。。个
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
   });
   ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
     data,
     total
   };
