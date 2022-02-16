@@ -33,16 +33,24 @@ const FindOne = async ctx => {
 
 //首页列表
 const List = async ctx => {
-  const query = ctx.query; {}
+  const query = ctx.query;
+  const where = {
+    category_name: {
+      [Op.like]: `%${query.category_name}%`
+    }
+  }
   console.log('query',query)
   const { rows: data, count: total } = await categoryModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
-    offset: (+query.page - 1) * +query.pageSize,//跳过。。个
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
   });
   ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
     data,
     total
   };
