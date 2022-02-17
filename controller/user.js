@@ -34,15 +34,15 @@ const Login = async (ctx) => {
         // 签发token
         let token = JWT.getToken({user_phone: data.user_phone, user_id: data.user_id}) || 0
         ctx.body = {
-            code: data ? 200 : 300,
-            desc: data ? '登陆成功' : '手机号或密码错误',
+            code: data ? 200 : 433,
+            msg: data ? '登陆成功' : '手机号或密码错误',
             data,
             token: token || 0
         };
     }else {
         ctx.body = {
-            code: 300,
-            msg: "登录失败手机号密码错误或不存在"
+            code: 433,
+            msg: "登录失败 手机号密码错误或不存在"
         };
     }
 };
