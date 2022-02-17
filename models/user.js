@@ -19,6 +19,9 @@ const user = dbConfig.define(
         msg: '已存在'
       }
     },
+    user_sex: {
+      type: DataTypes.STRING
+    },
     user_password: {
       type: DataTypes.STRING
     },
