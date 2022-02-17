@@ -11,6 +11,9 @@ const articleRouter = new Router({
     prefix: '/article'
 });
 
+
+
+
 articleRouter.get('/list', articleCtl.List)
 
 articleRouter.post('/add', articleCtl.Add)

@@ -36,17 +36,19 @@ let upload = multer({ storage: storage })
 // 图片
 let uploadSin = upload.single('myfile')
 const uploadImg = async ctx => { //myfile字段 //body form-data
-    let path = ctx.req.file.path.replace('public','')
-    path = ctx.origin + '' + path.replace()
+    let filepath = ctx.req.file.path.replace('public','')
+    let normalpath = filepath.replace(/\\/g,'/')   //  \\转换成 /
+    let urlpath = ctx.origin + '' + normalpath.replace()
+    console.log('path.....',  ctx.origin, filepath, normalpath)
     ctx.body = {
         errno: 0,
         filename: ctx.req.file.filename,//返回文件名
-        path: path,
+        path: urlpath,
         // data: ctx.req.file 
         data:[{
-            url: path,
+            url: urlpath,
             alt: ctx.req.file.filename,
-            href: path
+            href: urlpath
         }]
     }
 }

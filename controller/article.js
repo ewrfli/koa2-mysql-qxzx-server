@@ -6,6 +6,30 @@ const sequelize = require("sequelize");
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
 
+//根据种类加载首页文章列表
+const categoryList = async ctx => {
+  const query = ctx.query;
+  console.log('query',query)
+  const where = {
+    article_category: {
+      [Op.like]: `%${query.article_category}%`
+    }
+  }
+  const { rows: data, count: total } = await articleModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
+    // where: { // count符合查询条件的记录总数
+    // },
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
+    limit: +query.pageSize,
+    order: [['updatedAt','DESC']]
+  });
+  ctx.body = {
+    code:  200,
+    data,
+    total
+  };
+};
+
 const FindAll = async ctx => {
   const data = await articleModel.findAll({
     order: [
@@ -34,12 +58,18 @@ const FindOne = async ctx => {
 //首页列表
 const List = async ctx => {
   const query = ctx.query;
-  console.log('query',query)
-  const where = {
-    article_title: {
-      [Op.like]: `%${query.article_title}%`
-    }
-  }
+  // const where = {
+  //   article_title: {
+  //     [Op.like]: `%${query.article_title}%`
+  //   }
+  // }
+
+  console.log('query',query, Object.keys(query)[0])
+  const queryName = Object.keys(query)[0]
+  const where = {}
+  where[queryName] = { [Op.like]: `%${query[queryName]}%` }
+  console.log('where',where)
+  
   const { rows: data, count: total } = await articleModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
@@ -195,6 +225,7 @@ const Repost = async ctx => {
 };
 
 module.exports = {
+  categoryList,
   List,
   Add,
   Del,
