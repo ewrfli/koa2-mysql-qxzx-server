@@ -50,6 +50,7 @@ const List = async ctx => {
     // where: { // count符合查询条件的记录总数
     // },
     where,
+    include: [articleModel],
     offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
