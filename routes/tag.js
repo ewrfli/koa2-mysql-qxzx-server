@@ -4,6 +4,7 @@ const tagCtl = require("../controller/tag");
 const tagRouter = new Router({  
     prefix: '/tag'
 });
+tagRouter.get('/blogThemeList', tagCtl.blogThemeList)
 
 tagRouter.get('/list', tagCtl.List)
 

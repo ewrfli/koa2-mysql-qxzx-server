@@ -19,6 +19,15 @@ const star = dbConfig.define(
     user_name: {
         type: DataTypes.STRING
     },
+    tag_id: {
+        type:  DataTypes.INTEGER(11)
+    },
+    category_id: {
+        type: DataTypes.INTEGER(11)
+    },
+    company_id: {
+        type: DataTypes.INTEGER(11)
+    },
     article_id: {
         type: DataTypes.INTEGER(11)
     },

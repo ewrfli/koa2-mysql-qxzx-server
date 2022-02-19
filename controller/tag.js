@@ -30,16 +30,15 @@ const FindOne = async ctx => {
       data,
   };
 }
-
-//列表
-const List = async ctx => {
+//blog话题列表
+const blogThemeList = async ctx => {
   const query = ctx.query;
-  const where = {
-    tag_name: {
-      [Op.like]: `%${query.tag_name}%`
-    }
-}
-  console.log('query',query)
+
+  const queryName = Object.keys(query)[0]
+  const where = {}
+  where[queryName] = { [Op.eq]: query[queryName]} 
+  console.log('querytag',query)
+  console.log('wheretag',where)
   const { rows: data, count: total } = await tagModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
@@ -47,6 +46,31 @@ const List = async ctx => {
     offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
+  });
+  ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
+    data,
+    total
+  };
+}
+
+//列表
+const List = async ctx => {
+  const query = ctx.query;
+
+  const queryName = Object.keys(query)[0]
+  const where = {}
+  where[queryName] = { [Op.like]: `%${query[queryName]}%` }
+  console.log('querytag',query)
+  console.log('wheretag',where)
+  const { rows: data, count: total } = await tagModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
+    // where: { // count符合查询条件的记录总数
+    // },
+    where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
+    limit: +query.pageSize,
+    order: [['tag_id']]
   });
   ctx.body = {
     code:  200,
@@ -131,6 +155,7 @@ const Details = async ctx => {
 };
 
 module.exports = {
+  blogThemeList,
   List,
   Add,
   Del,

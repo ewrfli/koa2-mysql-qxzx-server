@@ -2,6 +2,8 @@
 const dbConfig = require('../db/dbConfig');
 const starModel = require('../models/star');
 const articleModel = require('../models/article');
+const tagModel = require('../models/tag');
+const userModel = require('../models/user');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_stars`", { type: QueryTypes.SELECT }); //原始查询
@@ -10,6 +12,12 @@ const { Op, QueryTypes  } = require('sequelize');//运算符
 // 1----1   一对一关系
 starModel.hasOne(articleModel, {foreignKey: 'article_id', sourceKey: 'article_id'})
 articleModel.belongsTo(starModel, {foreignKey: 'article_id', targetKey: 'article_id'})
+
+starModel.hasOne(tagModel,{foreignKey: 'tag_id', sourceKey: 'tag_id'})
+tagModel.belongsTo(starModel, {foreignKey: 'tag_id', targetKey: 'tag_id'})
+
+articleModel.hasOne(userModel, {foreignKey: 'user_id', sourceKey: 'user_id'})
+userModel.belongsTo(articleModel, {foreignKey: 'user_id', targetKey: 'user_id'})
 
 const FindAll = async ctx => {
   const data = await starModel.findAll({
@@ -63,8 +71,8 @@ const List = async ctx => {
   };
 };
 
-//用户 我的收藏列表
-const myList = async ctx => { //?id=xx
+//用户 我的收藏文章列表
+const myArticleList = async ctx => { //?id=xx
   const query = ctx.query;
   if (!query.user_id) {
     ctx.body = {
@@ -74,7 +82,8 @@ const myList = async ctx => { //?id=xx
     return false;
   }
   const where = {
-    user_id: Number(ctx.query.user_id)
+    user_id: Number(ctx.query.user_id),
+    [Op.not]: [{article_id: null}]
   }
   const data = await starModel.findAll({
     where,
@@ -89,6 +98,34 @@ const myList = async ctx => { //?id=xx
     };
 };
 
+
+//用户 我的收藏tag列表
+const myTagList = async ctx => { //?id=xx
+  const query = ctx.query;
+  if (!query.user_id) {
+    ctx.body = {
+      code: 300,
+      msg: 'user_id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    user_id: Number(ctx.query.user_id),
+    [Op.not]:[{tag_id: null}]
+  }
+  const data = await starModel.findAll({
+    where,
+    attributes:['star_id', 'user_id', 'tag_id'],
+    include: [{model: tagModel, attributes:['tag_id', 'tag_name', 'tag_desc','tag_coverimg']}],
+    order: [['updatedAt', 'DESC']]
+  });
+
+    ctx.body = {
+      code: data[0] ? 200 : 300,
+      msg: data[0] ? 'tag查找成功' : 'tag查找失败',
+      data
+    };
+};
 
 // 添加
 const Add = async ctx => {
@@ -165,7 +202,8 @@ const Details = async ctx => {
 };
 
 module.exports = {
-  myList,
+  myTagList,
+  myArticleList,
   List,
   Add,
   Del,
