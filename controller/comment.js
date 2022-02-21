@@ -1,9 +1,13 @@
 // 用户评论 增删改查api
 const dbConfig = require('../db/dbConfig');
 const commentModel = require('../models/comment');
+const userModel = require('../models/user');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_articles`", { type: QueryTypes.SELECT }); //原始查询
+// 1----1  一对一关系 一个文章有一个用户
+commentModel.hasOne(userModel, {foreignKey: 'user_id', sourceKey: 'user_id'})
+userModel.belongsTo(commentModel, {foreignKey: 'user_id', targetKey: 'user_id'})
 
 const FindAll = async ctx => {
   const data = await commentModel.findAll({
@@ -33,7 +37,7 @@ const FindOne = async ctx => {
 
 //首页列表
 const List = async ctx => {
-  const query = ctx.query; {}
+  const query = ctx.query;
   console.log('query',query)
   const where = {
     user_name: {
@@ -130,7 +134,32 @@ const Details = async ctx => {
   };
 };
 
+const findArticliCommentList = async ctx =>{ //查询当前文章的评论
+  const query = ctx.query;
+  console.log('query',query)
+  // const where = {
+  //   article_id: query.id
+  // } 
+  const { rows: data, count: total } = await commentModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
+    where: { 
+      article_id: Number(query.id)
+    },
+    include: [{
+      model: userModel,
+      attributes:['user_id', 'user_name', 'user_avatarimg']
+    }],
+    order: [['updatedAt','DESC']]
+  });
+  ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
+    data,
+    total
+  };
+}
+
 module.exports = {
+  findArticliCommentList,
   List,
   Add,
   Del,

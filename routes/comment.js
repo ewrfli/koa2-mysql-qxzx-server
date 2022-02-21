@@ -5,7 +5,7 @@ const commentRouter = new Router({
     prefix: '/comment'
 });
 
-
+commentRouter.get('/curarticle', commentCtl.findArticliCommentList)//获取文章的评论
 
 commentRouter.get('/list', commentCtl.List)
 
