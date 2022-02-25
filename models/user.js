@@ -55,6 +55,9 @@ const user = dbConfig.define(
     user_ip: {
         type: DataTypes.STRING
     },
+    user_industry:{   //行业
+        type: DataTypes.STRING
+    },
     user_company_id: {
         type: DataTypes.INTEGER(11)
     },
