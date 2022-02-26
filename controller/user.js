@@ -192,20 +192,16 @@ const FindAll = async (ctx, next) => {
 //查询某一个
 const FindOne = async (ctx, next) => {
     const query = ctx.query
-    const where = {
-        user_name: {
-          [Op.like]: `%${query.user_name}%`
-        }
-    }
+    const where = { user_id: Number(query.user_id) }
     console.log('findone', where);
 
-    const data = await userModel.findAll({
+    const data = await userModel.findOne({
         where,
         order: [['updatedAt', 'DESC']],
     });
     ctx.body = {
-        code: data[0] ? 200 : 300,
-        msg: data[0] ? '查询成功' : '查询失败',
+        code: data ? 200 : 300,
+        msg: data ? '查询成功' : '查询失败',
         data
     };
 };
