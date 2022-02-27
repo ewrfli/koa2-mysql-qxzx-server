@@ -66,7 +66,7 @@ app.use(bannerRouter.routes(), bannerRouter.allowedMethods())//banner img
 
 
 // 注册 JWT 中间件 
-app.use(koajwt({ secret: SIGN_KEY }).unless({ method: 'GET' }));//.unless({ method: 'GET' })
+app.use(koajwt({ secret: SIGN_KEY }));//.unless({ method: 'GET' })
 //受jwk保护的routes放后面
 //正在开发
 app.use(proAdminRouter.routes(), proAdminRouter.allowedMethods())//管理员

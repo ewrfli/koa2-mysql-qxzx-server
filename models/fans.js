@@ -19,6 +19,9 @@ const fans = dbConfig.define(
     user_name: {
       type: DataTypes.STRING
     }, //attention
+    user_category: {  //0 我关注的 1 他关注我 2 互相关注
+      type: DataTypes.INTEGER(11)
+    },
     attention_user_id: {
       type: DataTypes.INTEGER(11)
     },

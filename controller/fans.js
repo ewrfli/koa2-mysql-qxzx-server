@@ -1,9 +1,13 @@
 // 用户关注的朋友 增删改查api
 const dbConfig = require('../db/dbConfig');
 const fansModel = require('../models/fans');
+const userModel = require('../models/user');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_fanss`", { type: QueryTypes.SELECT }); //原始查询
+// 1----1  一对一关系 一个文章有一个用户
+fansModel.hasOne(userModel, {foreignKey: 'user_id', sourceKey: 'user_id'})
+userModel.belongsTo(fansModel, {foreignKey: 'user_id', targetKey: 'user_id'})
 
 const FindAll = async ctx => {
   const data = await fansModel.findAll({
@@ -22,6 +26,10 @@ const FindOne = async ctx => {
   console.log('findone', params);
   const data = await fansModel.findAll({
       where: params,
+      include: [{
+        model: userModel,
+        attributes:['user_id', 'user_name', 'user_avatarimg', 'user_desc']
+      }],
       order: [['updatedAt', 'DESC']],
   });
   ctx.body = {
@@ -36,8 +44,8 @@ const List = async ctx => {
   const query = ctx.query; {}
   console.log('query',query)
   const where = {
-    user_name: {
-      [Op.like]: `%${query.user_name}%`
+    user_id: {
+      [Op.like]: `%${query.user_id}%`
     }
   } 
   const { rows: data, count: total } = await fansModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
@@ -85,10 +93,10 @@ const myList = async ctx => { //?id=xx
 const Add = async ctx => {
   const params = ctx.request.body;
   console.log('create:',params)
-  if (!params || !params.attention_user_name) {
+  if (!params || !params.user_id) {
     ctx.body = {
       code: 1003,
-      msg: '不能为空'
+      msg: 'user_id不能为空'
     };
     return false;
   }
@@ -109,7 +117,8 @@ const Add = async ctx => {
 
 const Del = async ctx => {
   console.log('Del',ctx.request.body)
-  const rel = await fansModel.destroy({ where: ctx.request.body });
+
+  // const rel = await fansModel.destroy({ where: ctx.request.body });
   ctx.body = {
     code: rel ? 200 : 300,
     msg: rel ? '删除成功' : '删除失败',

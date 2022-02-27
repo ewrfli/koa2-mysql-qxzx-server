@@ -13,10 +13,10 @@ fansRouter.post('/del', fansCtl.Del)
 
 fansRouter.post('/update', fansCtl.Update)
 
-fansRouter.get('/findone', fansCtl.FindOne);
+fansRouter.post('/findone', fansCtl.FindOne);
 
-fansRouter.get('/findall', fansCtl.FindAll);
+fansRouter.post('/findall', fansCtl.FindAll);
 
-fansRouter.get('/details', fansCtl.Details)
+fansRouter.post('/details', fansCtl.Details)
 
 module.exports = fansRouter
