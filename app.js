@@ -20,6 +20,7 @@ const companyRouter = require('./routes/company')
 const fansRouter = require('./routes/fans')
 const starRouter = require('./routes/star')
 const tagRouter = require('./routes/tag')
+const riskRouter = require('./routes/risk')
 const bannerRouter = require('./routes/banner')
 //
 const webRouter = require('./routes/web')
@@ -59,6 +60,7 @@ app.use(companyRouter.routes(), companyRouter.allowedMethods())//公司标签
 app.use(fansRouter.routes(), fansRouter.allowedMethods())//用户关注好友
 app.use(starRouter.routes(), starRouter.allowedMethods())//收藏
 app.use(tagRouter.routes(), tagRouter.allowedMethods())//话题标签
+app.use(riskRouter.routes(), riskRouter.allowedMethods())//风险
 app.use(UploadRouter.routes(), UploadRouter.allowedMethods())//文件
 app.use(bannerRouter.routes(), bannerRouter.allowedMethods())//banner img
 // 

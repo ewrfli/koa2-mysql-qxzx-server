@@ -5,33 +5,30 @@ const { DataTypes } = require("sequelize"); // 导入内置数据类型
 const moment = require('moment');
 
 // 定义表结构
-const company = dbConfig.define(
-  'qx_company',
+const tag = dbConfig.define(
+  'qx_risk',
   {
-    company_id: {
+    risk_id: {
         type: DataTypes.INTEGER(11), // 设置字段类型
         primaryKey: true, // 设置为主键
         autoIncrement: true // 自增
     },
-    company_name: {
+    company_id: {
+        type: DataTypes.INTEGER(11)
+    },
+    risk_grade: {
         type: DataTypes.STRING
     },
-    company_coverimg: {
+    risk_tag: {
         type: DataTypes.STRING
     },
-    company_category_name: {
+    risk_name: {
         type: DataTypes.STRING
     },
-    company_tag_name: {
+    risk_desc: {
         type: DataTypes.STRING
     },
-    company_desc: {
-        type: DataTypes.STRING
-    },
-    company_content: {
-        type: DataTypes.TEXT
-    },
-    risk_id: {
+    risk_coverimg: {
         type: DataTypes.STRING
     },
     createdAt: {
@@ -55,4 +52,4 @@ const company = dbConfig.define(
     freezeTableName: true
   }
 );
-module.exports = company;
+module.exports = tag;
