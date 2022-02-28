@@ -1,9 +1,14 @@
 // 公司标签 增删改查api
 const dbConfig = require('../db/dbConfig');
 const companyModel = require('../models/company');
+const riskModel = require('../models/risk');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_companys`", { type: QueryTypes.SELECT }); //原始查询
+// 定义关系
+// 1----1  一对一关系 一个文章有一个用户
+companyModel.hasMany(riskModel, {foreignKey: 'company_id', sourceKey: 'company_id'})
+riskModel.belongsTo(companyModel, {foreignKey: 'company_id', targetKey: 'company_id'})
 
 const FindAll = async ctx => {
   const data = await companyModel.findAll({
@@ -20,13 +25,17 @@ const FindAll = async ctx => {
 const FindOne = async ctx => {
   const params = ctx.request.body;
   console.log('findone', params);
-  const data = await companyModel.findAll({
+  const data = await companyModel.findOne({
+    include: [{
+      model: riskModel,
+      // attributes:['user_id', 'user_name', 'user_avatarimg']
+    }],
       where: params,
       order: [['updatedAt', 'DESC']],
   });
   ctx.body = {
-      code: data[0] ? 200 : 300,
-      msg: data[0] ? '查询成功' : '查询失败',
+      code: data ? 200 : 300,
+      msg: data ? '查询成功' : '查询失败',
       data,
   };
 }

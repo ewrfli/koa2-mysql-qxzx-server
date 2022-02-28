@@ -16,6 +16,9 @@ const company = dbConfig.define(
     company_name: {
         type: DataTypes.STRING
     },
+    company_follow_num: {
+        type: DataTypes.INTEGER(11)
+    },
     company_coverimg: {
         type: DataTypes.STRING
     },
@@ -30,6 +33,15 @@ const company = dbConfig.define(
     },
     company_content: {
         type: DataTypes.TEXT
+    },
+    company_people: {
+        type: DataTypes.STRING
+    },
+    company_money: {
+        type: DataTypes.STRING
+    },
+    company_date: {
+        type: DataTypes.STRING
     },
     risk_id: {
         type: DataTypes.STRING
