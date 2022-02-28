@@ -13,7 +13,7 @@ companyRouter.post('/del', companyCtl.Del)
 
 companyRouter.post('/update', companyCtl.Update)
 
-companyRouter.post('/findone', companyCtl.FindOne);
+companyRouter.get('/findone', companyCtl.FindOne);
 
 companyRouter.post('/findall', companyCtl.FindAll);
 

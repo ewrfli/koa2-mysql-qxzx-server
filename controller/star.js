@@ -3,6 +3,7 @@ const dbConfig = require('../db/dbConfig');
 const starModel = require('../models/star');
 const articleModel = require('../models/article');
 const tagModel = require('../models/tag');
+const companyModel = require('../models/company');
 const userModel = require('../models/user');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
@@ -18,6 +19,9 @@ tagModel.belongsTo(starModel, {foreignKey: 'tag_id', targetKey: 'tag_id'})
 
 articleModel.hasOne(userModel, {foreignKey: 'user_id', sourceKey: 'user_id'})
 userModel.belongsTo(articleModel, {foreignKey: 'user_id', targetKey: 'user_id'})
+
+starModel.hasOne(companyModel,{foreignKey: 'company_id', sourceKey: 'company_id'})
+companyModel.belongsTo(starModel, {foreignKey: 'company_id', targetKey: 'company_id'})
 
 const FindAll = async ctx => {
   const data = await starModel.findAll({
@@ -69,6 +73,33 @@ const List = async ctx => {
     data,
     total
   };
+};
+
+//用户 我的关注公司列表
+const myCompanyList = async ctx => { //?id=xx
+  const query = ctx.query;
+  if (!query.user_id) {
+    ctx.body = {
+      code: 300,
+      msg: 'user_id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    user_id: Number(ctx.query.user_id),
+    [Op.not]: [{company_id: null}]
+  }
+  const data = await starModel.findAll({
+    where,
+    include: [companyModel],
+    order: [['updatedAt', 'DESC']]
+  });
+
+    ctx.body = {
+      code: data[0] ? 200 : 300,
+      msg: data[0] ? '查找成功' : '查找失败',
+      data
+    };
 };
 
 //用户 我的收藏文章列表
@@ -202,6 +233,7 @@ const Details = async ctx => {
 };
 
 module.exports = {
+  myCompanyList,
   myTagList,
   myArticleList,
   List,

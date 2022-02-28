@@ -23,14 +23,18 @@ const FindAll = async ctx => {
 }
 
 const FindOne = async ctx => {
-  const params = ctx.request.body;
-  console.log('findone', params);
+  
+  const query = ctx.query;
+  console.log('findone',query)
+  const where = {
+    company_id: query.company_id
+  }
   const data = await companyModel.findOne({
     include: [{
       model: riskModel,
       // attributes:['user_id', 'user_name', 'user_avatarimg']
     }],
-      where: params,
+      where,
       order: [['updatedAt', 'DESC']],
   });
   ctx.body = {
@@ -45,9 +49,7 @@ const List = async ctx => {
   const query = ctx.query;
   console.log('query',query)
   const where = {
-    company_name: {
-      [Op.like]: `%${query.company_name}%`
-    }
+    company_tag_id: query.company_tag_id
   }
   const { rows: data, count: total } = await companyModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数

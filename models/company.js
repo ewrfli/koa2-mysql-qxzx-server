@@ -25,6 +25,9 @@ const company = dbConfig.define(
     company_category_name: {
         type: DataTypes.STRING
     },
+    company_tag_id: {
+        type: DataTypes.INTEGER(11)
+    },
     company_tag_name: {
         type: DataTypes.STRING
     },

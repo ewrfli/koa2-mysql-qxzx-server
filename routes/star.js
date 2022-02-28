@@ -7,7 +7,10 @@ const starRouter = new Router({
 
 starRouter.get('/myarticlelist', starCtl.myArticleList) //我的文章收藏用户端读取 http://127.0.0.1:3002/star/list?user_id=1
 
-starRouter.get('/mytaglist', starCtl.myTagList) //我的文章收藏用户端
+starRouter.get('/mytaglist', starCtl.myTagList) //我的话题收藏
+
+starRouter.get('/mycompanylist', starCtl.myCompanyList) ////用户 我的关注公司列表
+
 
 starRouter.get('/list', starCtl.List) // 管理端/star/list?user_name=admin?pageNo=1&
 

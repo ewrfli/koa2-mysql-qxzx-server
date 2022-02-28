@@ -13,6 +13,9 @@ const tag = dbConfig.define(
         primaryKey: true, // 设置为主键
         autoIncrement: true // 自增
     },
+    risk_date: {
+        type: DataTypes.STRING
+    },
     company_id: {
         type: DataTypes.INTEGER(11)
     },
