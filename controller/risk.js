@@ -1,12 +1,19 @@
 // 话题标签 增删改查api
 const dbConfig = require('../db/dbConfig');
 const riskModel = require('../models/risk');
+const companyModel = require('../models/company');
 const sequelize = require("sequelize"); 
 const { Op, QueryTypes  } = require('sequelize');//运算符
 // const data = await dbConfig.query("SELECT * FROM `qx_risks`", { type: QueryTypes.SELECT }); //原始查询
+// 1----1  一对一关系 一个文章有一个用户
 
+riskModel.hasOne(companyModel, {foreignKey: 'company_id', sourceKey: 'company_id'})
+companyModel.belongsTo(riskModel, {foreignKey: 'company_id', targetKey: 'company_id'})
 const FindAll = async ctx => {
   const data = await riskModel.findAll({
+    include: [{
+      model: companyModel
+    }],
     order: [
       ['updatedAt', 'DESC']
     ]

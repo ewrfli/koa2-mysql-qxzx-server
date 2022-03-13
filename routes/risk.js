@@ -14,7 +14,7 @@ riskRouter.post('/del', riskCtl.Del)
 
 riskRouter.post('/update', riskCtl.Update)
 
-riskRouter.get('/findone', riskCtl.FindOne);
+riskRouter.get('/findone', riskCtl.FindOne);//findone?company_id=1 公司主界面 监控列表
 
 riskRouter.get('/findall', riskCtl.FindAll);
 
