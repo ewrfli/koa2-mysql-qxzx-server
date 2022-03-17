@@ -15,7 +15,7 @@ companyRouter.post('/update', companyCtl.Update)
 
 companyRouter.get('/findone', companyCtl.FindOne);
 
-companyRouter.post('/findall', companyCtl.FindAll);
+companyRouter.get('/findall', companyCtl.FindAll);
 
 companyRouter.post('/details', companyCtl.Details)
 
