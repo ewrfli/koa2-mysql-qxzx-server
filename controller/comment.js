@@ -158,7 +158,36 @@ const findArticliCommentList = async ctx =>{ //查询当前文章的评论
   };
 }
 
+const Like = async ctx => {
+  const query = ctx.query;
+  if (!query.id) {
+    ctx.body = {
+      code: 300,
+      msg: 'id不能为空'
+    };
+    return false;
+  }
+  const where = {
+    comment_id: Number(ctx.query.id)
+  }
+  const data = await commentModel.findOne({
+    where
+  });
+
+  let Count = data.comment_like_count + 1
+  await commentModel.update({comment_like_count: Count}, {
+    where
+  });
+  
+    ctx.body = {
+      code: data ? 200 : 300,
+      msg: data ? '查找成功' : '查找失败',
+      data:data.comment_like_count
+    };
+};
+
 module.exports = {
+  Like,
   findArticliCommentList,
   List,
   Add,

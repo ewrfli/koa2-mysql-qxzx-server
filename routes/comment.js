@@ -19,6 +19,8 @@ commentRouter.get('/findone', commentCtl.FindOne);
 
 commentRouter.get('/findall', commentCtl.FindAll);
 
-commentRouter.get('/details', commentCtl.Details)
+commentRouter.get('/details', commentCtl.Details);
+
+commentRouter.get('/like', commentCtl.Like)
 
 module.exports = commentRouter

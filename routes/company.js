@@ -5,6 +5,8 @@ const companyRouter = new Router({
     prefix: '/company'
 });
 
+companyRouter.get('/hlist', companyCtl.hList)
+
 companyRouter.get('/list', companyCtl.List)
 
 companyRouter.post('/add', companyCtl.Add)

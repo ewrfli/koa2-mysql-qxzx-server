@@ -206,7 +206,7 @@ const Like = async ctx => {
     ctx.body = {
       code: data ? 200 : 300,
       msg: data ? '查找成功' : '查找失败',
-      data
+      data:data.article_like_count
     };
 };
 

@@ -44,7 +44,7 @@ const FindOne = async ctx => {
   };
 }
 
-//列表
+//前端列表
 const List = async ctx => {
   const query = ctx.query;
   console.log('query',query)
@@ -55,6 +55,25 @@ const List = async ctx => {
     // where: { // count符合查询条件的记录总数
     // },
     where,
+    offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
+    limit: +query.pageSize,
+    order: [['updatedAt','DESC']]
+  });
+  ctx.body = {
+    code:  200,
+    msg:  '列表查询成功',
+    data,
+    total
+  };
+};
+
+//后端管理列表
+const hList = async ctx => {
+  const query = ctx.query;
+  console.log('query',query)
+  const { rows: data, count: total } = await companyModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
+    // where: { // count符合查询条件的记录总数
+    // },
     offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
     order: [['updatedAt','DESC']]
@@ -142,6 +161,7 @@ const Details = async ctx => {
 };
 
 module.exports = {
+  hList,
   List,
   Add,
   Del,
