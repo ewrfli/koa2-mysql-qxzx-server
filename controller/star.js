@@ -61,7 +61,7 @@ const List = async ctx => {
   const { rows: data, count: total } = await starModel.findAndCountAll({ //结合了 findAll 和 count 的便捷方法
     // where: { // count符合查询条件的记录总数
     // },
-    where,
+    // where,
     include: [articleModel],
     offset: (+query.pageNo - 1) * +query.pageSize,//跳过。。个
     limit: +query.pageSize,
