@@ -32,4 +32,6 @@ articleRouter.get('/like', articleCtl.Like);
 
 articleRouter.get('/repost', articleCtl.Repost);
 
+articleRouter.get('/search');
+
 module.exports = articleRouter

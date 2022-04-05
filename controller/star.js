@@ -162,7 +162,7 @@ const myTagList = async ctx => { //?id=xx
 const Add = async ctx => {
   const params = ctx.request.body; //{user_id: xx, article_id:xx, article_title:xx,}
   console.log('create:',params)
-  if (!params || !params.article_title) {
+  if (!params) {
     ctx.body = {
       code: 1003,
       msg: '不能为空'

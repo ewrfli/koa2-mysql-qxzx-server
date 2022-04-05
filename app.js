@@ -22,6 +22,7 @@ const starRouter = require('./routes/star')
 const tagRouter = require('./routes/tag')
 const riskRouter = require('./routes/risk')
 const bannerRouter = require('./routes/banner')
+const searchRouter = require('./routes/search')
 //
 const webRouter = require('./routes/web')
 
@@ -63,6 +64,7 @@ app.use(tagRouter.routes(), tagRouter.allowedMethods())//话题标签
 app.use(riskRouter.routes(), riskRouter.allowedMethods())//风险
 app.use(UploadRouter.routes(), UploadRouter.allowedMethods())//文件
 app.use(bannerRouter.routes(), bannerRouter.allowedMethods())//banner img
+app.use(searchRouter.routes(), searchRouter.allowedMethods()) //搜索
 // 
 //allowedMethods: ctx.status为空或者404的时候,丰富response对象的header头.
 
